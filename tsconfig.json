@@ -26,7 +26,12 @@
       ],
       "@tests/*": [
         "tests/*"
-      ]
+      ],
     }
-  }
+  },
+  "include": [
+    "src/**/*",
+    "test/**/*",
+    "ormconfig.ts"
+  ],
 }
