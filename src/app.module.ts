@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './app/users/users.module';
-import { RolesModule } from './app/roles/roles.module';
-import { PermissionsModule } from './app/permissions/permissions.module';
+import { UserModule } from './app/user/user.module';
 import { AuthModule } from './app/auth/auth.module';
 import { CommandsModule } from './core/commands/commands.module';
 import {ThrottlerModule} from '@nestjs/throttler'
@@ -11,6 +9,8 @@ import { SharedModule } from './core/shared/shared.module';
 import { ThrottlerConfigService } from './core/shared/throttler/throttler-config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './core/shared/postgres/postgres-config.service';
+import { RoleModule } from './app/role/role.module';
+import { PermissionModule } from './app/permission/permission.module';
 
 @Module({
   imports: [
@@ -22,12 +22,12 @@ import { PostgresConfigService } from './core/shared/postgres/postgres-config.se
       imports: [SharedModule],
       useExisting: PostgresConfigService,
     }),
-    UsersModule,
-    RolesModule,
-    PermissionsModule,
+    UserModule,
     AuthModule,
     CommandsModule,
-    SharedModule
+    SharedModule,
+    RoleModule,
+    PermissionModule
   ],
   controllers: [AppController],
   providers: [AppService],

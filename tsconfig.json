@@ -24,6 +24,12 @@
       "@data/*": [
         "data/*"
       ],
+      "@config/*": [
+        "src/config/shared/*"
+      ],
+      "@core/*": [
+        "src/core/*"
+      ],
       "@tests/*": [
         "tests/*"
       ],

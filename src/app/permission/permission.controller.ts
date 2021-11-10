@@ -1,34 +1,34 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PermissionsService } from './permissions.service';
+import { PermissionService } from './permission.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
 
-@Controller('permissions')
-export class PermissionsController {
-  constructor(private readonly permissionsService: PermissionsService) {}
+@Controller('permission')
+export class PermissionController {
+  constructor(private readonly permissionService: PermissionService) {}
 
   @Post()
   create(@Body() createPermissionDto: CreatePermissionDto) {
-    return this.permissionsService.create(createPermissionDto);
+    return this.permissionService.create(createPermissionDto);
   }
 
   @Get()
   findAll() {
-    return this.permissionsService.findAll();
+    return this.permissionService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.permissionsService.findOne(+id);
+    return this.permissionService.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePermissionDto: UpdatePermissionDto) {
-    return this.permissionsService.update(+id, updatePermissionDto);
+    return this.permissionService.update(+id, updatePermissionDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.permissionsService.remove(+id);
+    return this.permissionService.remove(+id);
   }
 }

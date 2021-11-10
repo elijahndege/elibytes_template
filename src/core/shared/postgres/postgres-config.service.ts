@@ -16,7 +16,7 @@ export class PostgresConfigService implements TypeOrmOptionsFactory{
             password: this.config.databasePassword,
             database: this.config.databaseName,
             entities: [
-                this.config.baseFolder + '/modules/**/*.entity{.ts,.js}',
+                this.config.baseFolder + '/app/**/*.entity{.ts,.js}',
             ],
             migrations: [
                 this.config.baseFolder + '/database/migrations/**/*{.ts,.js}',
@@ -25,7 +25,7 @@ export class PostgresConfigService implements TypeOrmOptionsFactory{
                 migrationsDir: this.config.baseFolder + '/database/migrations',
             },
             subscribers: [
-                this.config.baseFolder + '/modules/**/*.subscriber{.ts,.js}',
+                this.config.baseFolder + '/app/**/*.subscriber{.ts,.js}',
             ],
             synchronize: false,
             migrationsRun: this.config.typeormMigrationsrun,

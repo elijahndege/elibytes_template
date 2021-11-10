@@ -3,13 +3,13 @@ import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
 
 @Injectable()
-export class PermissionsService {
+export class PermissionService {
   create(createPermissionDto: CreatePermissionDto) {
     return 'This action adds a new permission';
   }
 
   findAll() {
-    return `This action returns all permissions`;
+    return `This action returns all permission`;
   }
 
   findOne(id: number) {

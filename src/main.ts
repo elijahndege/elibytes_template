@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from './core/shared/config/config.service';
 import * as helmet from 'helmet';
 import { SharedModule } from './core/shared/shared.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,7 +16,13 @@ async function bootstrap() {
     .use(helmet())
     .enableCors();
 
-  app.useGlobalPipes();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      stopAtFirstError: true,
+      transform: true,
+    }),
+  );
   app.useGlobalFilters()
 
   if (config.appEnv === 'development' || config.appEnv === 'local') {
