@@ -14,6 +14,6 @@ import { LocalLoginRepository } from './repositories/local-login.repository';
   ],
   controllers: [UserController],
   providers: [UserService],
-  exports:[TypeOrmModule]
+  exports:[UserService, TypeOrmModule]
 })
 export class UserModule {}

@@ -4,6 +4,7 @@ import { RedisService } from './redis/redis.service';
 import { ThrottlerConfigService } from './throttler/throttler-config.service';
 import { BaseConfigService } from './config/base-config.service';
 import { ConfigService } from './config/config.service';
+import { JwtConfigService } from './jwt/jwt-config.service';
 
 @Global()
 @Module({
@@ -13,6 +14,7 @@ import { ConfigService } from './config/config.service';
     RedisService,
     ConfigService,
     BaseConfigService,
+    JwtConfigService,
     {
         provide: 'CONFIG_OPTIONS',
         useFactory: (baseConfigService: BaseConfigService) =>
@@ -20,6 +22,6 @@ import { ConfigService } from './config/config.service';
         inject: [BaseConfigService],
     },
   ],
-  exports:[PostgresConfigService, ConfigService, ThrottlerConfigService, RedisService]
+  exports:[PostgresConfigService, ConfigService, ThrottlerConfigService, RedisService, JwtConfigService]
 })
 export class SharedModule {}
