@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './core/shared/postgres/postgres-config.service';
 import { RoleModule } from './app/role/role.module';
 import { PermissionModule } from './app/permission/permission.module';
+import { HealthModule } from './app/health/health.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { PermissionModule } from './app/permission/permission.module';
     CommandsModule,
     SharedModule,
     RoleModule,
-    PermissionModule
+    PermissionModule,
+    HealthModule
   ],
   controllers: [AppController],
   providers: [AppService],
