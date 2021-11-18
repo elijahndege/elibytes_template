@@ -3,7 +3,7 @@ import { CrudRepository } from "@src/core/abstracts/base-repo";
 import { FilterBuilder } from "@src/core/abstracts/filter-builder";
 import { HTTP_MESSAGE } from "@src/core/common/constants/error-message";
 import { EntityRepository } from "typeorm";
-import { FilterUserDto } from "../dto/filter-many.dto";
+import { FilterUserDto } from "../dto/filter-user.dto";
 import { User } from "../entities/user.entity";
 
 @EntityRepository(User)

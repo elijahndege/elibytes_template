@@ -1,9 +1,10 @@
 import { BaseEntity } from "@src/core/abstracts/base-entity";
 import { Column, Entity } from "typeorm";
 
-@Entity('roles')
-export class Role extends BaseEntity {
-    constructor(intialData: Partial<Role> = null) {
+@Entity('app-subjects')
+export class AppSubject extends BaseEntity{
+
+    constructor(intialData: Partial<AppSubject> = null) {
         super();
         if (intialData !== null) {
             Object.assign(this, intialData);
@@ -12,8 +13,5 @@ export class Role extends BaseEntity {
 
     @Column({ type: 'varchar', name: 'name' })
     name: string;
-
-    @Column({ type: 'varchar', name: 'description' })
-    description: string;
 
 }

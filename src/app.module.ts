@@ -12,6 +12,7 @@ import { PostgresConfigService } from './core/shared/postgres/postgres-config.se
 import { RoleModule } from './app/role/role.module';
 import { PermissionModule } from './app/permission/permission.module';
 import { HealthModule } from './app/health/health.module';
+import { ObjectModule } from './app/subject/subject.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { HealthModule } from './app/health/health.module';
     SharedModule,
     RoleModule,
     PermissionModule,
-    HealthModule
+    HealthModule,
+    ObjectModule
   ],
   controllers: [AppController],
   providers: [AppService],

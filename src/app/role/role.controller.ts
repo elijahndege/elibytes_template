@@ -1,34 +1,54 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
+import { ApiOperation } from '@nestjs/swagger';
+import { DeleteResult } from 'typeorm';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { User } from '../user/entities/user.entity';
+import { Role } from './entities/role.entity';
+import { FilterRoleDto } from './dto/filter-role.dto';
 
 @Controller('role')
 export class RoleController {
-  constructor(private readonly roleService: RoleService) {}
+  constructor(private readonly roleService: RoleService) { }
 
+
+  @ApiOperation({ summary: "Create a role" })
   @Post()
-  create(@Body() createRoleDto: CreateRoleDto) {
-    return this.roleService.create(createRoleDto);
+  // @IsAuth()
+  createOne(@Body() dto: CreateRoleDto): Promise<Role> {
+    return this.roleService.createOne(dto);
   }
 
+  @ApiOperation({ summary: "Get many roles" })
   @Get()
-  findAll() {
-    return this.roleService.findAll();
+  // @IsAuth()
+  findMany(@Query() param: FilterRoleDto) {
+    return this.roleService.findMany(param);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.roleService.findOne(+id);
+  @ApiOperation({ summary: "Get a role" })
+  @Get(":id")
+  // @IsAuth()
+  getOne(@Param("id", ParseIntPipe) id: number): Promise<Role> {
+    return this.roleService.findOneOrFail(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.roleService.update(+id, updateRoleDto);
+  @ApiOperation({ summary: "Update a role" })
+  @Patch(":id")
+  // @IsAuth()
+  updateOne(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() dto: UpdateRoleDto,
+  ): Promise<Role> {
+    return this.roleService.updateOne(id, dto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.roleService.remove(+id);
+  @ApiOperation({ summary: "Delete a role" })
+  @Delete(":id")
+  // @IsAuth()
+  deleteOne(@Param("id", ParseIntPipe) id: number): Promise<DeleteResult> {
+    return this.roleService.deleteOne(id);
   }
 }

@@ -1,34 +1,51 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query } from '@nestjs/common';
 import { PermissionService } from './permission.service';
-import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
+import { Permission } from './entities/permission.entity';
+import { ApiOperation } from '@nestjs/swagger';
+import { DeleteResult } from 'typeorm';
+import { FilterPermissionDto } from './dto/filter-permission.dto';
+import { CreatePermissionDto } from './dto/create-permission.dto';
 
 @Controller('permission')
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
 
+  @ApiOperation({ summary: "Create a permission" })
   @Post()
-  create(@Body() createPermissionDto: CreatePermissionDto) {
-    return this.permissionService.create(createPermissionDto);
+  // @IsAuth()
+  createOne(@Body() dto: CreatePermissionDto): Promise<Permission> {
+    return this.permissionService.createOne(dto);
   }
 
+  @ApiOperation({ summary: "Get many Permissions" })
   @Get()
-  findAll() {
-    return this.permissionService.findAll();
+  // @IsAuth()
+  findMany(@Query() param: FilterPermissionDto) {
+    return this.permissionService.findMany(param);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.permissionService.findOne(+id);
+  @ApiOperation({ summary: "Get a permission" })
+  @Get(":id")
+  // @IsAuth()
+  getOne(@Param("id", ParseIntPipe) id: number): Promise<Permission> {
+    return this.permissionService.findOneOrFail(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePermissionDto: UpdatePermissionDto) {
-    return this.permissionService.update(+id, updatePermissionDto);
+  @ApiOperation({ summary: "Update a role" })
+  @Patch(":id")
+  // @IsAuth()
+  updateOne(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() dto: UpdatePermissionDto,
+  ): Promise<Permission> {
+    return this.permissionService.updateOne(id, dto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.permissionService.remove(+id);
+  @ApiOperation({ summary: "Delete a Permission" })
+  @Delete(":id")
+  // @IsAuth()
+  deleteOne(@Param("id", ParseIntPipe) id: number): Promise<DeleteResult> {
+    return this.permissionService.deleteOne(id);
   }
 }
