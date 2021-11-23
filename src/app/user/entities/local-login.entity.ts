@@ -2,7 +2,7 @@ import { hashString } from '@src/core/utils/password-hash';
 import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { User } from './user.entity';
 
-@Entity({ name: 'local_logins' })
+@Entity({ name: 'local_login' })
 export class LocalLogin {
 
     constructor(intialData: Partial<LocalLogin> = null) {

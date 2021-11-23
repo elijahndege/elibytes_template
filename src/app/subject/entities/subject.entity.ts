@@ -1,7 +1,8 @@
+import { Permission } from "@src/app/permission/entities/permission.entity";
 import { BaseEntity } from "@src/core/abstracts/base-entity";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 
-@Entity('app-subjects')
+@Entity('subjects')
 export class AppSubject extends BaseEntity{
 
     constructor(intialData: Partial<AppSubject> = null) {
@@ -13,5 +14,8 @@ export class AppSubject extends BaseEntity{
 
     @Column({ type: 'varchar', name: 'name' })
     name: string;
+    
+    @OneToMany(() => Permission, permission => permission.subject)
+    permissions: Permission[];
 
 }

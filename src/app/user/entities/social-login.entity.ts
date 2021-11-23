@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 
-@Entity({ name: 'social_logins' })
+@Entity({ name: 'social_login' })
 export class SocialLogin {
 
     constructor(intialData: Partial<SocialLogin> = null) {
