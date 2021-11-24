@@ -31,7 +31,7 @@ import { ObjectModule } from './app/subject/subject.module';
     RoleModule,
     PermissionModule,
     HealthModule,
-    ObjectModule
+    ObjectModule,
   ],
   controllers: [AppController],
   providers: [AppService],

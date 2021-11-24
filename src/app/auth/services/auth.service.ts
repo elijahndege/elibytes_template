@@ -21,11 +21,9 @@ export class AuthService {
       where: {
         email: data.email,
       },
-      relations: ['localLogin']
+      relations: ['localLogin', 'roles', 'roles.permissions']
     });
-
-
-
+    console.log('[user]', user);
 
     const isSamePassword = await compareHashString(data.password, user.localLogin.password);
     if (!isSamePassword) {

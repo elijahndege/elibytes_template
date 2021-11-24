@@ -7,7 +7,7 @@ import { AppSubject } from './entities/subject.entity';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 
-@Controller('object')
+@Controller('subject')
 export class ObjectController {
   constructor(private readonly subjectService: AppSubjectService) { }
   

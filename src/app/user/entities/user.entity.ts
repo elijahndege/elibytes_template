@@ -39,15 +39,15 @@ export class User extends BaseEntity {
     @OneToOne(() => Address, address => address.user, { cascade: true })
     address: Address;
 
-    @ManyToMany(() => Role, role => role.users)
+    @ManyToMany(() => Role, role => role.users, {cascade: true})
     @JoinTable({
         name: "user_roles", // table name for the junction table of this relation
         joinColumn: {
-            name: "role_id",
+            name: "user_id",
             referencedColumnName: "id"
         },
         inverseJoinColumn: {
-            name: "user_id",
+            name: "role_id",
             referencedColumnName: "id"
         }
     })

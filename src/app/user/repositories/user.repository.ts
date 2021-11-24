@@ -1,4 +1,6 @@
 import { BadRequestException } from "@nestjs/common";
+import { Permission } from "@src/app/permission/entities/permission.entity";
+import { Role } from "@src/app/role/entities/role.entity";
 import { CrudRepository } from "@src/core/abstracts/base-repo";
 import { FilterBuilder } from "@src/core/abstracts/filter-builder";
 import { HTTP_MESSAGE } from "@src/core/common/constants/error-message";
@@ -24,5 +26,9 @@ export class UserRepository extends CrudRepository<User> {
       .getQueryBuilder<User>(this)
       .where("user.email LIKE :email", { email: `%${param.email || ""}%` })
       .getManyAndCount();
+  }
+
+  async findPermissions(userId: string): Promise<User> {
+    return this.findOne(userId, { relations: ['roles', 'roles.permissions'] })
   }
 }
