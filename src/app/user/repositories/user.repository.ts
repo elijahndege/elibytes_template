@@ -1,14 +1,12 @@
-import { BadRequestException } from "@nestjs/common";
-import { Permission } from "@src/app/permission/entities/permission.entity";
-import { Role } from "@src/app/role/entities/role.entity";
-import { CrudRepository } from "@src/core/abstracts/base-repo";
-import { FilterBuilder } from "@src/core/abstracts/filter-builder";
-import { HTTP_MESSAGE } from "@src/core/common/constants/error-message";
-import { EntityRepository } from "typeorm";
-import { FilterUserDto } from "../dto/filter-user.dto";
-import { User } from "../entities/user.entity";
+import { CrudRepository } from '@Core/abstracts/base-repo';
+import { FilterBuilder } from '@Core/abstracts/filter-builder';
+import { HTTP_MESSAGE } from '@Core/common/constants/error-message';
+import { CustomRepository } from '@Core/common/decorators/typeorm-ex.decorator';
+import { BadRequestException } from '@nestjs/common';
+import { FilterUserDto } from '../dto/filter-user.dto';
+import { User } from '../entities/user.entity';
 
-@EntityRepository(User)
+@CustomRepository(User)
 export class UserRepository extends CrudRepository<User> {
   async checkDuplicateEmail(email: string) {
     const isUserExists = await this.findOne({
@@ -24,11 +22,20 @@ export class UserRepository extends CrudRepository<User> {
   async findMany(param: FilterUserDto): Promise<[User[], number]> {
     return new FilterBuilder(param)
       .getQueryBuilder<User>(this)
-      .where("user.email LIKE :email", { email: `%${param.email || ""}%` })
+      .where('user.email LIKE :email', { email: `%${param.email || ''}%` })
       .getManyAndCount();
   }
 
   async findPermissions(userId: string): Promise<User> {
-    return this.findOne(userId, { relations: ['roles', 'roles.permissions'] })
+    return this.findOne({
+      where: {
+        id: userId,
+      },
+      relations: {
+        roles: {
+          permissions: true,
+        },
+      },
+    });
   }
 }

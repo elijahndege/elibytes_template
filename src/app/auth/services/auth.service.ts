@@ -1,6 +1,6 @@
+import { VALIDATION_MESSAGE } from '@Core/common/constants/error-message';
+import { compareHashString } from '@Core/utils/password-hash';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { VALIDATION_MESSAGE } from '@src/core/common/constants/error-message';
-import { compareHashString } from '@src/core/utils/password-hash';
 import { CreateUserDto } from '../../user/dto/create-user.dto';
 import { UserService } from '../../user/user.service';
 import { LoginDto } from '../dtos/auth.dto';
@@ -10,8 +10,8 @@ import { TokenService } from './token.service';
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly tokenService: TokenService
-  ) { }
+    private readonly tokenService: TokenService,
+  ) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<any> {
     return await this.userService.createOne(createUserDto);
@@ -21,11 +21,19 @@ export class AuthService {
       where: {
         email: data.email,
       },
-      relations: ['localLogin', 'roles', 'roles.permissions']
+      relations: {
+        localLogin: true,
+        roles: {
+          permissions: true,
+        },
+      },
     });
     console.log('[user]', user);
 
-    const isSamePassword = await compareHashString(data.password, user.localLogin.password);
+    const isSamePassword = await compareHashString(
+      data.password,
+      user.localLogin.password,
+    );
     if (!isSamePassword) {
       throw new BadRequestException(VALIDATION_MESSAGE.PASSWORD_NOT_MATCH);
     }

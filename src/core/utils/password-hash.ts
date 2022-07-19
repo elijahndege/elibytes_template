@@ -1,5 +1,5 @@
 // import { BCRYPT_SALT_ROUND } from "@config/env";
-import { hash, compare } from "bcrypt";
+import { hash, compare } from 'bcrypt';
 
 const saltRounds = 10;
 

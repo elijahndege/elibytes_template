@@ -1,16 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppSubjectService } from './subject.service';
-import { ObjectController } from './subject.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmExModule } from '@Providers/typeorm/typeorm-ex.module';
 import { AppSubjectRepository } from './repositories/subject.repository';
+import { ObjectController } from './subject.controller';
+import { AppSubjectService } from './subject.service';
 
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([
-      AppSubjectRepository
-    ])
-  ],
+  imports: [TypeOrmExModule.forCustomRepository([AppSubjectRepository])],
   controllers: [ObjectController],
-  providers: [AppSubjectService]
+  providers: [AppSubjectService],
 })
 export class ObjectModule {}

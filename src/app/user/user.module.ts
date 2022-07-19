@@ -1,19 +1,16 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from './repositories/user.repository';
+import { TypeOrmExModule } from '@Providers/typeorm/typeorm-ex.module';
 import { LocalLoginRepository } from './repositories/local-login.repository';
+import { UserRepository } from './repositories/user.repository';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([
-      UserRepository,
-      LocalLoginRepository
-    ])
+  imports: [
+    TypeOrmExModule.forCustomRepository([UserRepository, LocalLoginRepository]),
   ],
   controllers: [UserController],
   providers: [UserService],
-  exports:[UserService, TypeOrmModule]
+  exports: [UserService, TypeOrmExModule],
 })
 export class UserModule {}

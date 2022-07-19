@@ -1,0 +1,8 @@
+dist
+data
+logs
+.github
+.husky
+.npmrc
+.prettierrc
+node_modules

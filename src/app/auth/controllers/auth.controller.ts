@@ -1,14 +1,15 @@
-import { Controller, Post, Body } from "@nestjs/common";
-import { ApiOperation } from "@nestjs/swagger";
-import { UserService } from "@src/app/user/user.service";
-import { AuthService } from "../services/auth.service";
-import { LoginDto, RegisterDto } from "../dtos/auth.dto";
+import { UserService } from '@App/user/user.service';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
+import { LoginDto, RegisterDto } from '../dtos/auth.dto';
+import { AuthService } from '../services/auth.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly usersService: UserService,) {}
+    private readonly usersService: UserService,
+  ) {}
 
   // @ApiOperation({ summary: "Get current user using token" })
   // @Get("/me")
@@ -17,14 +18,14 @@ export class AuthController {
   //   return this.authService.getMe(user.id);
   // }
 
-  @ApiOperation({ summary: "Login and get current user" })
-  @Post("/signin")
+  @ApiOperation({ summary: 'Login and get current user' })
+  @Post('/signin')
   signin(@Body() data: LoginDto) {
     return this.authService.signin(data);
   }
 
-  @ApiOperation({ summary: "Signup and get current user" })
-  @Post("/signup")
+  @ApiOperation({ summary: 'Signup and get current user' })
+  @Post('/signup')
   async signUp(@Body() data: RegisterDto): Promise<any> {
     return this.authService.signUp(data);
   }

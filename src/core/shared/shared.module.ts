@@ -9,19 +9,25 @@ import { JwtConfigService } from './jwt/jwt-config.service';
 @Global()
 @Module({
   providers: [
-    PostgresConfigService, 
-    ThrottlerConfigService, 
+    PostgresConfigService,
+    ThrottlerConfigService,
     RedisService,
     ConfigService,
     BaseConfigService,
     JwtConfigService,
     {
-        provide: 'CONFIG_OPTIONS',
-        useFactory: (baseConfigService: BaseConfigService) =>
-            baseConfigService.getEnvironmentVariables(),
-        inject: [BaseConfigService],
+      provide: 'CONFIG_OPTIONS',
+      useFactory: (baseConfigService: BaseConfigService) =>
+        baseConfigService.getEnvironmentVariables(),
+      inject: [BaseConfigService],
     },
   ],
-  exports:[PostgresConfigService, ConfigService, ThrottlerConfigService, RedisService, JwtConfigService]
+  exports: [
+    PostgresConfigService,
+    ConfigService,
+    ThrottlerConfigService,
+    RedisService,
+    JwtConfigService,
+  ],
 })
 export class SharedModule {}

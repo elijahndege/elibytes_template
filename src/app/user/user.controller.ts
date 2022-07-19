@@ -1,16 +1,15 @@
-import { Controller, Post, Body, Get, Query, Param, ParseIntPipe, Patch, Delete } from "@nestjs/common";
-import { ApiTags, ApiOperation } from "@nestjs/swagger";
-import { DeleteResult } from "typeorm";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { User } from "./entities/user.entity";
-import { UserService } from "./user.service";
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
+import { UserService } from './user.service';
 
-@ApiTags("users")
-@Controller("users")
+@ApiTags('users')
+@Controller('users')
 export class UserController {
   constructor(public userService: UserService) {}
 
-  @ApiOperation({ summary: "Create a user" })
+  @ApiOperation({ summary: 'Create a user' })
   @Post()
   // @IsAuth()
   createOne(@Body() dto: CreateUserDto): Promise<User> {
@@ -27,7 +26,7 @@ export class UserController {
   // @ApiOperation({ summary: "Get a user" })
   // @Get(":id")
   // // @IsAuth()
-  // getOne(@Param("id", ParseIntPipe) id: number): Promise<User> {
+  // getOne(@Param("id",  new ParseUUIDPipe({ version: '4' })) id: number): Promise<User> {
   //   return this.service.findOneOrFail(id);
   // }
 
@@ -35,7 +34,7 @@ export class UserController {
   // @Patch(":id")
   // @IsAuth()
   // updateOne(
-  //   @Param("id", ParseIntPipe) id: number,
+  //   @Param("id",  new ParseUUIDPipe({ version: '4' })) id: number,
   //   @Body() dto: UpdateUserDTO,
   // ): Promise<User> {
   //   return this.service.updateOne(id, dto);
@@ -44,7 +43,7 @@ export class UserController {
   // @ApiOperation({ summary: "Delete a user" })
   // @Delete(":id")
   // @IsAuth()
-  // deleteOne(@Param("id", ParseIntPipe) id: number): Promise<DeleteResult> {
+  // deleteOne(@Param("id",  new ParseUUIDPipe({ version: '4' })) id: number): Promise<DeleteResult> {
   //   return this.service.deleteOne(id);
   // }
 }

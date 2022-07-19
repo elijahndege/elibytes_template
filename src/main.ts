@@ -1,20 +1,57 @@
-import { NestFactory, Reflector } from '@nestjs/core';
-import { AppModule } from './app.module';
-import 'reflect-metadata';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
+import 'reflect-metadata';
+import { AppModule } from './app.module';
 import { ConfigService } from './core/shared/config/config.service';
-import * as helmet from 'helmet';
 import { SharedModule } from './core/shared/shared.module';
-import { ValidationPipe } from '@nestjs/common';
+
+declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const reflector = app.get(Reflector);
   const config = app.select(SharedModule).get(ConfigService);
 
-  app
-    .use(helmet())
-    .enableCors();
+  app.use(
+    helmet.contentSecurityPolicy({
+      useDefaults: false,
+      directives: {
+        defaultSrc: ["'self'"],
+        'base-uri': ['self'],
+        //          "form-action": ["self"],
+        'script-src': ['self', 'http:https'],
+        'object-src': ['none'],
+        'require-trusted-types-for': ['script'],
+        upgradeInsecureRequests: [],
+        'report-uri': ['#'],
+      },
+    }),
+  );
+  app.use(helmet.crossOriginEmbedderPolicy());
+  app.use(helmet.crossOriginOpenerPolicy());
+  app.use(helmet.crossOriginResourcePolicy());
+  app.use(helmet.dnsPrefetchControl());
+  app.use(helmet.expectCt());
+  app.use(helmet.frameguard());
+  app.use(helmet.hidePoweredBy());
+  app.use(
+    helmet.hsts({
+      maxAge: 15552000,
+      includeSubDomains: true,
+    }),
+  );
+  app.use(helmet.ieNoOpen());
+  app.use(helmet.noSniff());
+  app.use(helmet.originAgentCluster());
+  app.use(helmet.permittedCrossDomainPolicies());
+  app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
+  app.use(helmet.xssFilter());
+
+  app.enableCors({
+    credentials: true,
+    origin: config.allowedOrigins,
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -23,7 +60,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.useGlobalFilters()
+  app.useGlobalFilters();
 
   if (config.appEnv === 'development' || config.appEnv === 'local') {
     const options = new DocumentBuilder()
@@ -31,18 +68,28 @@ async function bootstrap() {
       .setDescription('This is NestJs Starter Template')
       .setVersion('0.0.1')
       .addBearerAuth()
-      .setContact(
-        'Elijah Ndege',
-        'https://elibytes.me',
-        'hello@elibytes.ne'
-      )
+      .setContact('Elijah Ndege', 'https://elibytes.me', 'hello@elibytes.ne')
       .build();
 
-    const document = SwaggerModule.createDocument(app, options, { deepScanRoutes: true });
+    const document = SwaggerModule.createDocument(app, options, {
+      deepScanRoutes: true,
+    });
     SwaggerModule.setup('documentation', app, document);
   }
 
-  await app.listen(config.port);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  function listenCallback() {
+    Logger.log(
+      `*** Application running in [${config.appEnv}] environment on port [${config.port}] ***`,
+    );
+  }
+  try {
+    await app.listen(config.port, listenCallback);
+    if (module.hot) {
+      module.hot.accept();
+      module.hot.dispose(() => app.close());
+    }
+  } catch (error) {
+    Logger.error(error, `Application didn't run`);
+  }
 }
 bootstrap();

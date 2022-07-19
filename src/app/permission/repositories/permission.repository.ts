@@ -1,6 +1,6 @@
-import { CrudRepository } from "@src/core/abstracts/base-repo";
-import { EntityRepository } from "typeorm";
-import { Permission } from "../entities/permission.entity";
+import { CrudRepository } from '@Core/abstracts/base-repo';
+import { CustomRepository } from '@Core/common/decorators/typeorm-ex.decorator';
+import { Permission } from '../entities/permission.entity';
 
-@EntityRepository(Permission)
+@CustomRepository(Permission)
 export class PermissionRepository extends CrudRepository<Permission> {}

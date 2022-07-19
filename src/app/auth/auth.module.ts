@@ -1,18 +1,18 @@
+import { JwtConfigService } from '@Core/shared/jwt/jwt-config.service';
+import { SharedModule } from '@Core/shared/shared.module';
 import { Module } from '@nestjs/common';
-import { AuthService } from './services/auth.service';
-import { UserModule } from '../user/user.module';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { AuthController } from './controllers/auth.controller';
-import { TokenService } from './services/token.service';
 import { JwtModule } from '@nestjs/jwt';
-import { SharedModule } from '@src/core/shared/shared.module';
-import { JwtConfigService } from '@src/core/shared/jwt/jwt-config.service';
 import { PassportModule } from '@nestjs/passport';
+import { UserModule } from '../user/user.module';
+import { AuthController } from './controllers/auth.controller';
+import { AuthService } from './services/auth.service';
+import { TokenService } from './services/token.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports:[
+  imports: [
     UserModule,
-    PassportModule.register({ defaultStrategy: "jwt" }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [SharedModule],
       useExisting: JwtConfigService,
@@ -20,6 +20,6 @@ import { PassportModule } from '@nestjs/passport';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, TokenService],
-  exports:[JwtStrategy,TokenService]
+  exports: [JwtStrategy, TokenService],
 })
 export class AuthModule {}

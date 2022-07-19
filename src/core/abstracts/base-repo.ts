@@ -1,9 +1,16 @@
-import { NotFoundException } from "@nestjs/common";
-import { Repository, DeepPartial, ObjectID, FindOneOptions, FindConditions, DeleteResult } from "typeorm";
-import { HTTP_MESSAGE } from "../common/constants/error-message";
-import { BaseFilterDto } from "../common/dtos/filter-many";
-import { FilterBuilder } from "./filter-builder";
-
+import { NotFoundException } from '@nestjs/common';
+import {
+  DeepPartial,
+  DeleteResult,
+  FindOneOptions,
+  FindOptionsWhere,
+  ObjectID,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
+import { HTTP_MESSAGE } from '../common/constants/error-message';
+import { BaseFilterDto } from '../common/dtos/filter-many';
+import { FilterBuilder } from './filter-builder';
 
 /**
  * @Usage Base repository class for crud purposes. Please extend from this class when creating new repository classes and add additional methods if needed.
@@ -14,22 +21,11 @@ export class CrudRepository<T> extends Repository<T> {
     return this.save(entity);
   }
 
-  findOneOrFail(
-    id?: string | number | Date | ObjectID,
-    options?: FindOneOptions<T>,
-  ): Promise<T>;
-  findOneOrFail(options?: FindOneOptions<T>): Promise<T>;
-  findOneOrFail(
-    conditions?: FindConditions<T>,
-    options?: FindOneOptions<T>,
-  ): Promise<T>;
+  findOneOrFail(options: FindOneOptions<T>): Promise<T>;
 
-  async findOneOrFail(
-    conditions?: any,
-    options?: FindOneOptions<T>,
-  ): Promise<T> {
+  async findOneOrFail(options: FindOneOptions<T>): Promise<T> {
     try {
-      return super.findOneOrFail(conditions, options);
+      return super.findOneOrFail(options);
     } catch {
       throw new NotFoundException(HTTP_MESSAGE.NOT_FOUND);
     }
@@ -39,8 +35,18 @@ export class CrudRepository<T> extends Repository<T> {
     return new FilterBuilder(param).getQueryBuilder<T>(this).getManyAndCount();
   }
 
-  async updateOne(id: number, dto: DeepPartial<T>): Promise<T> {
-    let entity = await this.findOneOrFail(id);
+  getAll(): SelectQueryBuilder<T> {
+    return this.getQueryBuilder<T>(this);
+  }
+
+  public getQueryBuilder<T>(repo: Repository<T>): SelectQueryBuilder<T> {
+    const qb: SelectQueryBuilder<T> = repo.createQueryBuilder(
+      repo.metadata.targetName,
+    );
+    return qb;
+  }
+  async updateOne(options: FindOneOptions<T>, dto: DeepPartial<T>): Promise<T> {
+    let entity = await this.findOneOrFail(options);
     entity = {
       ...entity,
       ...dto,
@@ -48,10 +54,18 @@ export class CrudRepository<T> extends Repository<T> {
     return this.save(entity);
   }
 
-  async deleteOne(id: number, exception = false): Promise<DeleteResult> {
-    if (exception) {
-      await this.findOneOrFail(id);
-    }
-    return this.delete(id);
+  async deleteOne(
+    criteria:
+      | string
+      | string[]
+      | number
+      | number[]
+      | Date
+      | Date[]
+      | ObjectID
+      | ObjectID[]
+      | FindOptionsWhere<T>,
+  ): Promise<DeleteResult> {
+    return this.delete(criteria);
   }
 }

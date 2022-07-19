@@ -1,6 +1,5 @@
-import { Repository, SelectQueryBuilder } from "typeorm";
-import { BaseFilterDto } from "../common/dtos/filter-many";
-
+import { Repository, SelectQueryBuilder } from 'typeorm';
+import { BaseFilterDto } from '../common/dtos/filter-many';
 
 export class FilterBuilder {
   limit: number;

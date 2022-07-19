@@ -1,6 +1,6 @@
-import { CrudRepository } from "@src/core/abstracts/base-repo";
-import { Entity, EntityRepository } from "typeorm";
-import { AppSubject } from "../entities/subject.entity";
+import { CrudRepository } from '@Core/abstracts/base-repo';
+import { CustomRepository } from '@Core/common/decorators/typeorm-ex.decorator';
+import { AppSubject } from '../entities/subject.entity';
 
-@EntityRepository(AppSubject)
-export class AppSubjectRepository extends CrudRepository<AppSubject>{ }
+@CustomRepository(AppSubject)
+export class AppSubjectRepository extends CrudRepository<AppSubject> {}
